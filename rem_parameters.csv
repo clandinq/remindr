@@ -1,0 +1,2 @@
+proj_name,emails_from,secret_path,fut_conf_activate,fut_conf_emails,fut_conf_freq,conf_dl_activate,conf_dl_emails,conf_dl_freq,up_pres_activate,up_pres_emails,up_pres_freq,grant_dl_activate,grant_dl_emails,grant_dl_freq
+project_name,email,path_to_secret,FALSE,emails,"60, 90, 120",FALSE,emails,"0, 1, 7, 14",FALSE,emails,"1, 7, 14",FALSE,emails,"0, 1, 7, 14"
