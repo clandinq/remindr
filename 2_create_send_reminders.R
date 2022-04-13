@@ -11,7 +11,7 @@
 
 #***************** Import packages *****************#
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load(here, gmailr, tidyverse, lubridate,
+pacman::p_load(this.path, gmailr, tidyverse, lubridate,
                magrittr)
 #*************************************************** #
 
@@ -19,7 +19,7 @@ pacman::p_load(here, gmailr, tidyverse, lubridate,
 ##    (1): Define all functions and general parameters.   ##
 ############################################################
 # (1.1): Import parameters as objects. #
-current_params <- read_csv(here("rem_parameters.csv"))
+current_params <- read_csv(file.path(this.dir(), "rem_parameters.csv"))
 for (c in colnames(current_params)) {
   assign(c, current_params %>% pull(c))
 }
@@ -64,7 +64,7 @@ for (rem in activated_rems) {
                         rem == "conf_dl" ~ "rem_conference_deadlines.csv",
                         rem == "grant_dl" ~ "rem_grant_deadlines.csv",
                         rem == "up_pres" ~ "rem_upcoming_presentations.csv")
-  current_dataset <- read_csv(rem_file)
+  current_dataset <- read_csv(file.path(this.dir(), rem_file))
   
   # Define comma separated emails to send reminders.
   current_emails <- eval(as.name(paste0(rem, "_emails")))
@@ -182,6 +182,6 @@ for (rem in activated_rems) {
   current_results %<>%
     mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
     mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete))
-  write_csv(current_results, here(rem_file))
+  write_csv(current_results, file.path(this.dir(), rem_file))
 }
 

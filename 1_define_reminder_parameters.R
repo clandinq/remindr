@@ -8,21 +8,24 @@
 
 #***************** Import packages *****************#
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load(here, cronR, tidyverse)
+pacman::p_load(this.path, cronR, tidyverse)
 #*************************************************** #
 
 ################################################################
 ##    (1): Define reminder parameters: MODIFY THIS SECTION.   ##
 ################################################################
 # (1.1): Define general reminder parameters. #
-# 1. Define short project name (max. 20 characters). For example: "Current RCT".
+# 1. Define absolute project path where reminders folder is. For example: /Users/js/Dropbox/myproject/reminders
+proj_path <- "/Users/cesarlandin/Dropbox/iZettle_fee/reminders"
+
+# 2. Define short project name (max. 20 characters). For example: "Current RCT".
 proj_name <- "project_name"
 
-# 2. Define email to send reminders from and name for signature.
+# 3. Define email to send reminders from and name for signature.
 email_from <- "email"
 name_from <- "name"
 
-# 3. Define absolute path to client secret.
+# 4. Define absolute path to client secret.
 # Example: 
 # secret_path <- "/Users/js/Documents/important/client_secret_349342394234.apps.googleusercontent.com.json"
 secret_path <- "path_to_secret"
@@ -33,22 +36,22 @@ secret_path <- "path_to_secret"
 # 2) Define comma separated emails to send future conference reminders (e.g. "john.smith@gmail.com, jane.smith@hotmail.com").
 # 3) Define comma separated frequency to send future conference reminders in days (e.g. "1, 2, 5, 10").
 
-# 4. Parameters for future conference reminders.
+# 5. Parameters for future conference reminders.
 fut_conf_activate <- FALSE
 fut_conf_emails <- "emails"
-fut_conf_freq <- "60, 90, 120"
+fut_conf_freq <- "90, 120, 150"
 
-# 5. Parameters for conference deadline reminders.
+# 6. Parameters for conference deadline reminders.
 conf_dl_activate <- FALSE
 conf_dl_emails <- "emails"
 conf_dl_freq <- "0, 1, 7, 14"
 
-# 6. Parameters for upcoming presentation reminders.
+# 7. Parameters for upcoming presentation reminders.
 up_pres_activate <- FALSE
 up_pres_emails <- "emails"
 up_pres_freq <- "1, 7, 14"
 
-# 7. Parameters for grant deadline reminders.
+# 8. Parameters for grant deadline reminders.
 grant_dl_activate <- FALSE
 grant_dl_emails <- "emails"
 grant_dl_freq <- "0, 1, 7, 14"
@@ -61,7 +64,8 @@ cron_ls()
 
 # (2.2): Save parameters locally to read by reminder script. #
 current_params <- tibble(proj_name = proj_name,
-                         email_from = emails_from, 
+                         name_from = name_from,
+                         email_from = email_from, 
                          secret_path = secret_path,
                          # Parameters for future conference reminders.
                          fut_conf_activate = fut_conf_activate,
@@ -79,11 +83,11 @@ current_params <- tibble(proj_name = proj_name,
                          grant_dl_activate = grant_dl_activate,
                          grant_dl_emails = grant_dl_emails,
                          grant_dl_freq = grant_dl_freq)
-write_csv(current_params, here("rem_parameters.csv"))
+write_csv(current_params, file.path(this.dir(), "rem_parameters.csv"))
     
 # (2.3): If any reminder is activated, run reminder script hourly. #
 if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate) {
-  reminder_script <- here("2_create_send_reminders.R")
+  reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
   cmd <- cron_rscript(reminder_script)
   cron_add(command = cmd, 
            frequency = "0 10,14,18 * * *", # Runs at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
