@@ -19,7 +19,7 @@ pacman::p_load(this.path, gmailr, tidyverse, lubridate,
 ##    (1): Define all functions and general parameters.   ##
 ############################################################
 # (1.1): Import parameters as objects. #
-current_params <- read_csv(file.path(this.dir(), "rem_parameters.csv"))
+current_params <- read_csv(file.path(this.dir(), "rem_parameters.csv"), col_types = cols())
 for (c in colnames(current_params)) {
   assign(c, current_params %>% pull(c))
 }
@@ -57,6 +57,7 @@ exists_not_na <- function(string) {
 ##    (2): Loop over reminder types and conferences.   ##
 #########################################################
 # (2.1): Loop over reminder types. #
+now()
 for (rem in activated_rems) {
   
   # Import reminder file.
@@ -64,7 +65,7 @@ for (rem in activated_rems) {
                         rem == "conf_dl" ~ "rem_conference_deadlines.csv",
                         rem == "grant_dl" ~ "rem_grant_deadlines.csv",
                         rem == "up_pres" ~ "rem_upcoming_presentations.csv")
-  current_dataset <- read_csv(file.path(this.dir(), rem_file))
+  current_dataset <- read_csv(file.path(this.dir(), rem_file), col_types = cols())
   
   # Define comma separated emails to send reminders.
   current_emails <- eval(as.name(paste0(rem, "_emails")))
@@ -159,6 +160,7 @@ for (rem in activated_rems) {
           gm_send_message(email_body)
           
           # Flag email sent.
+          print(paste(rem, "email sent"))
           sent_email <- 1
           
           # Alternative: reminder hasn't been sent but deadline still in future -> sent reminder as 0.
