@@ -15,17 +15,14 @@ pacman::p_load(this.path, cronR, tidyverse)
 ##    (1): Define reminder parameters: MODIFY THIS SECTION.   ##
 ################################################################
 # (1.1): Define general reminder parameters. #
-# 1. Define absolute project path where reminders folder is. For example: /Users/js/Dropbox/myproject/reminders
-proj_path <- "/Users/cesarlandin/Dropbox/iZettle_fee/reminders"
-
-# 2. Define short project name (max. 20 characters). For example: "Current RCT".
+# 1. Define short project name (max. 20 characters). For example: "Current RCT".
 proj_name <- "project_name"
 
-# 3. Define email to send reminders from and name for signature.
+# 2. Define email to send reminders from and name for signature.
 email_from <- "email"
 name_from <- "name"
 
-# 4. Define absolute path to client secret.
+# 3. Define absolute path to client secret.
 # Example: 
 # secret_path <- "/Users/js/Documents/important/client_secret_349342394234.apps.googleusercontent.com.json"
 secret_path <- "path_to_secret"
@@ -36,22 +33,22 @@ secret_path <- "path_to_secret"
 # 2) Define comma separated emails to send future conference reminders (e.g. "john.smith@gmail.com, jane.smith@hotmail.com").
 # 3) Define comma separated frequency to send future conference reminders in days (e.g. "1, 2, 5, 10").
 
-# 5. Parameters for future conference reminders.
+# 4. Parameters for future conference reminders.
 fut_conf_activate <- FALSE
 fut_conf_emails <- "emails"
 fut_conf_freq <- "90, 120, 150"
 
-# 6. Parameters for conference deadline reminders.
+# 5. Parameters for conference deadline reminders.
 conf_dl_activate <- FALSE
 conf_dl_emails <- "emails"
 conf_dl_freq <- "0, 1, 7, 14"
 
-# 7. Parameters for upcoming presentation reminders.
+# 6. Parameters for upcoming presentation reminders.
 up_pres_activate <- FALSE
 up_pres_emails <- "emails"
 up_pres_freq <- "1, 7, 14"
 
-# 8. Parameters for grant deadline reminders.
+# 7. Parameters for grant deadline reminders.
 grant_dl_activate <- FALSE
 grant_dl_emails <- "emails"
 grant_dl_freq <- "0, 1, 7, 14"
