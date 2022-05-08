@@ -139,9 +139,9 @@ for (rem in activated_rems) {
           assign(notif_varname, 1)
           
           # Define reminder text.
-          rem_text <- paste0("This is an automated reminder that the \n \n", description,
+          rem_text <- paste0("This is an automated reminder that the ", description,
                              ifelse(rem == "up_pres", 
-                                    paste0("\n \n will take place on ", deadline, ". \n \n"),
+                                    paste0(" will take place on ", deadline, ". \n \n"),
                                     paste0(" has a ", rem_description, " coming up on ", deadline, ". \n \n")),
                              ifelse(rem == "grant_dl",
                                     paste0("This grant requires the following deliverable: \n \n", details, "\n \n"), ""),
