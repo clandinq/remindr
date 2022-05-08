@@ -65,7 +65,8 @@ for (rem in activated_rems) {
                         rem == "conf_dl" ~ "rem_conference_deadlines.csv",
                         rem == "grant_dl" ~ "rem_grant_deadlines.csv",
                         rem == "up_pres" ~ "rem_upcoming_presentations.csv")
-  current_dataset <- read_csv(file.path(this.dir(), rem_file), col_types = cols())
+  current_dataset <- read_csv(file.path(this.dir(), rem_file), col_types = cols()) %>% 
+    mutate(deadline = ymd(deadline))
   
   # Define comma separated emails to send reminders.
   current_emails <- eval(as.name(paste0(rem, "_emails")))
@@ -183,7 +184,8 @@ for (rem in activated_rems) {
   # Save updated csv.
   current_results %<>%
     mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
-    mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete))
+    mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete),
+           deadline = str_replace_all(deadline, "-", "_"))
   write_csv(current_results, file.path(this.dir(), rem_file))
 }
 

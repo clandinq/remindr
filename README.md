@@ -23,11 +23,11 @@ This will download 2 scripts, 5 csv files, this readme and a .Rproj file.
 Users need to modify two sets of files to set up the reminder system. First, one to four CSV files containing details about conferences, grants and presentations, that will be used to send the reminders. The files and variables are:
 
 1. `rem_future_conferences.csv`: Future conference reminders. 
-    1. `deadline`: Estimated *date* the conference will take place in yyyy-mm-dd text format.
+    1. `deadline`: Estimated *date* the conference will take place in yyyy_mm_dd text format. This format is used to prevent Excel from automatically changing the date format.
     2. `description`: Description of the conference.
     3. `website`: Conference website.
 2. `rem_conference_deadlines.csv`: Conference deadlines.
-    1. `deadline`: Conference abstract or paper submission deadline in yyyy-mm-dd text format.
+    1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format.
     2. `notification`: Date notification on admission sent. Can be NA.
     3. `description`: Description of the conference.
     4. `questions`: Line indicating who to ask conference questions. Can be NA.
@@ -35,13 +35,13 @@ Users need to modify two sets of files to set up the reminder system. First, one
     6. `dead_type`: *abstract* or *paper*.
     7. `website`: Conference website.
 3. `rem_upcoming_presentations.csv`: Reminders for upcoming presentations, including slide submission deadlines.
-    1. `deadline`: Upcoming presentation date or slide submission deadline in yyyy-mm-dd text format.
+    1. `deadline`: Upcoming presentation date or slide submission deadline in yyyy_mm_dd text format.
     2. `dead_type`: *conference presentation* or *slide submission*.
     3. `description`: Description of the conference.
     4. `submission: Link to submit slides to. Can be NA if `dead_type`="conference presentation".
     5. `website`: Conference website.
 4. `rem_grant_deadlines.csv`: Grant deadlines.
-    1. `deadline`: Grant deadline in yyyy-mm-dd text format.
+    1. `deadline`: Grant deadline in yyyy_mm_dd text format.
     2. `description`: Description of the grant.
     3. `dead_type`: *deliverable*, *proposal* or other (cannot be NA).
     4. `details`: Details about what the submission requires
