@@ -104,13 +104,19 @@ if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate)
     # Run reminders at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
     reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
     taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders"), 
-                         schedule = "DAILY", starttime = "10:00")
+                         taskname = paste0(proj_name, "_reminders_10"), 
+                         schedule = "DAILY", 
+                         starttime = "10:00", 
+                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
     taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders"), 
-                         schedule = "DAILY", starttime = "14:00")
+                         taskname = paste0(proj_name, "_reminders_14"), 
+                         schedule = "DAILY", 
+                         starttime = "14:00",
+                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
     taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders"), 
-                         schedule = "DAILY", starttime = "18:00")
+                         taskname = paste0(proj_name, "_reminders_18"), 
+                         schedule = "DAILY", 
+                         starttime = "18:00",
+                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
   }
 }
