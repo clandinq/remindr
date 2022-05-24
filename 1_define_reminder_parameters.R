@@ -8,7 +8,7 @@
 
 #***************** Import packages *****************#
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load(this.path, cronR, tidyverse)
+pacman::p_load(this.path, tidyverse)
 #*************************************************** #
 
 ################################################################
@@ -56,8 +56,13 @@ grant_dl_freq <- "0, 1, 7, 14"
 ###############################################################
 ##    (2): Automate reminders: DO NOT MODIFY THIS SECTION.   ##
 ###############################################################
-# (2.1): Show existing cron jobs. #
-cron_ls()
+# (2.1): Function to get currrent OS. #
+define_os <- function() {
+  output <- Sys.info()["sysname"]
+  current_os <- case_when(output == "Darwin" ~ "mac",
+                          output == "Windows" ~ "windows")
+  return(current_os)
+}
 
 # (2.2): Save parameters locally to read by reminder script. #
 current_params <- tibble(proj_name = proj_name,
@@ -82,12 +87,30 @@ current_params <- tibble(proj_name = proj_name,
                          grant_dl_freq = grant_dl_freq)
 write_csv(current_params, file.path(this.dir(), "rem_parameters.csv"))
     
-# (2.3): If any reminder is activated, run reminder script hourly. #
+# (2.3): If any reminder is activated, set upp reminders depending on operating system. #
 if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate) {
+  # Define path of reminder script.
   reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
-  cmd <- cron_rscript(reminder_script)
-  cron_add(command = cmd, 
-           frequency = "0 10,14,18 * * *", # Runs at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
-           id = paste0(proj_name, "_reminders"), 
-           description = paste0("Send ", proj_name, " future conference, conference deadline, presentation and grant reminders."))
+  # Define current OS and set reminders.
+  if (define_os() == "mac") {
+    pacman::p_load(cronR)
+    cmd <- cron_rscript(reminder_script)
+    cron_add(command = cmd, 
+             frequency = "0 10,14,18 * * *", # Runs at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
+             id = paste0(proj_name, "_reminders"), 
+             description = paste0("Send ", proj_name, " future conference, conference deadline, presentation and grant reminders."))
+  } else if (define_os() == "windows") {
+    pacman::p_load(taskscheduleR)
+    # Run reminders at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
+    reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
+    taskscheduler_create(rscript = reminder_script, 
+                         taskname = paste0(proj_name, "_reminders"), 
+                         schedule = "DAILY", starttime = "10:00")
+    taskscheduler_create(rscript = reminder_script, 
+                         taskname = paste0(proj_name, "_reminders"), 
+                         schedule = "DAILY", starttime = "14:00")
+    taskscheduler_create(rscript = reminder_script, 
+                         taskname = paste0(proj_name, "_reminders"), 
+                         schedule = "DAILY", starttime = "18:00")
+  }
 }
