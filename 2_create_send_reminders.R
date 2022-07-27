@@ -10,9 +10,12 @@
 #********************************************************************************************
 
 #***************** Import packages *****************#
-if (!require(pacman)) {install.packages("pacman")}
+suppressMessages(
+  if (!require(pacman)) {install.packages("pacman")}
+)
 pacman::p_load(this.path, gmailr, tidyverse, lubridate,
                magrittr)
+options(gargle_oauth_email = TRUE)
 #*************************************************** #
 
 ############################################################
