@@ -1,5 +1,5 @@
 #********************************************************************************************
-# File name: 		      reminder_functions.R
+# File name: 		      2_create_send_reminders.R
 # Creation date:      2022-03-22
 # Author:          		César Landín
 # Purpose:
@@ -142,20 +142,22 @@ for (rem in activated_rems) {
           assign(notif_varname, 1)
           
           # Define reminder text.
-          rem_text <- paste0("This is an automated reminder that the ", description,
+          rem_text <- paste0("<html><body>",
+                             "This is an automated reminder that the ", description,
                              ifelse(rem == "up_pres", 
-                                    paste0(" will take place on ", deadline, ". \n \n"),
-                                    paste0(" has a ", rem_description, " coming up on ", deadline, ". \n \n")),
+                                    paste0(" will take place on ", deadline, ". <br><br>"),
+                                    paste0(" has a ", rem_description, " coming up on ", deadline, ". <br><br>")),
                              ifelse(rem == "grant_dl",
-                                    paste0("This grant requires the following deliverable: \n \n", details, "\n \n"), ""),
+                                    paste0("This grant requires the following deliverable: <br><br>", details, "<br><br>"), ""),
                              ifelse(exists_not_na("submission"), 
                                     ifelse(dead_type != "conference",
-                                           paste("Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. \n \n"), ""),
+                                           paste("Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>"), ""),
                                     ""),
-                             ifelse(exists_not_na("website"), paste("For more information, please refer to ", website, "\n \n"), ""),
-                             ifelse(exists_not_na("questions"), paste("For any questions, please contact ", questions, "\n \n"), ""),
-                             "Best, \n \n",
-                             name_from)
+                             ifelse(exists_not_na("website"), paste("For more information, please refer to ", website, "<br><br>"), ""),
+                             ifelse(exists_not_na("questions"), paste("For any questions, please contact ", questions, "<br><br>"), ""),
+                             "Best, <br><br>",
+                             name_from,
+                             "</body></html>")
           
           # Prepare and send email.
           email_body <-
@@ -163,7 +165,7 @@ for (rem in activated_rems) {
             gm_to(current_emails) %>%  
             gm_from(email_from) %>%
             gm_subject(rem_title) %>%
-            gm_text_body(rem_text)
+            gm_html_body(rem_text)
           gm_send_message(email_body)
           
           # Flag email sent.
