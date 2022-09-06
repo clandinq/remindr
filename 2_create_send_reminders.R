@@ -153,8 +153,8 @@ for (rem in activated_rems) {
                                     ifelse(dead_type != "conference",
                                            paste("Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>"), ""),
                                     ""),
-                             ifelse(exists_not_na("website"), paste("For more information, please refer to ", website, "<br><br>"), ""),
-                             ifelse(exists_not_na("questions"), paste("For any questions, please contact ", questions, "<br><br>"), ""),
+                             ifelse(exists_not_na("website"), paste("For more information, please refer to ", website, "<br><br>"), "."),
+                             ifelse(exists_not_na("questions"), paste("For any questions, please contact ", questions, "<br><br>"), "."),
                              "Best, <br><br>",
                              name_from,
                              "</body></html>")
