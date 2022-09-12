@@ -143,6 +143,7 @@ for (rem in activated_rems) {
           
           # Define reminder text.
           rem_text <- paste0("<html><body>",
+                             "Hi all, <br><br>",
                              "This is an automated reminder that the ", description,
                              ifelse(rem == "up_pres", 
                                     paste0(" will take place on ", deadline, ". <br><br>"),
@@ -153,8 +154,8 @@ for (rem in activated_rems) {
                                     ifelse(dead_type != "conference",
                                            paste("Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>"), ""),
                                     ""),
-                             ifelse(exists_not_na("website"), paste("For more information, please refer to ", website, "<br><br>"), "."),
-                             ifelse(exists_not_na("questions"), paste("For any questions, please contact ", questions, "<br><br>"), "."),
+                             ifelse(exists_not_na("website"), paste0("For more information, please refer to ", website, ". <br><br>"), ""),
+                             ifelse(exists_not_na("questions"), paste0("For any questions, please contact ", questions, ". <br><br>"), ""),
                              "Best, <br><br>",
                              name_from,
                              "</body></html>")
