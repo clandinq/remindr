@@ -26,7 +26,7 @@ This will download 2 scripts, 5 .xlsx files, this readme and a .Rproj file.
 ### 2. Fill out Excel files with conference, grant and presentation information
 You need to modify two sets of files to set up the reminder system. First, one to four .xlsx files containing details about conferences, grants and presentations, that will be used to send the reminders. The files and variables are:
 
-1. `rem_future_conferences.xlsx`: **Future conference reminders*
+1. `rem_future_conferences.xlsx`: **Future conference reminders**
     1. `deadline`: Estimated *date* the conference will take place in yyyy_mm_dd text format. This format is used to prevent Excel from automatically changing the date format.
     2. `description`: Description of the conference.
     3. `website`: Conference website.
