@@ -14,7 +14,7 @@ There are three steps for setting up the remindR system:
 2. Fill out conference, grant and presentation information
 3. Define reminder parameters
 
-### 1. Cloning the repo
+### 1. Clone the repo
 First clone the repo locally into the desired project folder. This system works best with the folder structure defined by [Sean Higgins](https://seankhiggins.com/) in his [R guide](https://github.com/skhiggins/r_guide). The recommendation is to add the system to the Dropbox folder so that all project members (including those not using GitHub) can see programmed events in the reminder datasets. For example, below is a brief example of the terminal commands to clone a project titled "Health RCT".
 
 ```r
@@ -24,7 +24,7 @@ git clone https://github.com/clandinq/remindr reminders
 This will download 2 scripts, 5 .xlsx files, this readme and a .Rproj file. 
 
 ### 2. Fill out Excel files with conference, grant and presentation information
-Users need to modify two sets of files to set up the reminder system. First, one to four .xlsx files containing details about conferences, grants and presentations, that will be used to send the reminders. The files and variables are:
+You need to modify two sets of files to set up the reminder system. First, one to four .xlsx files containing details about conferences, grants and presentations, that will be used to send the reminders. The files and variables are:
 
 1. `rem_future_conferences.xlsx`: Future conference reminders. 
     1. `deadline`: Estimated *date* the conference will take place in yyyy_mm_dd text format. This format is used to prevent Excel from automatically changing the date format.
@@ -77,7 +77,7 @@ Second, general project and specific reminder parameters need to be set in scrip
    - `_emails`: comma separated emails to send reminders to (e.g. "john.smith@gmail.com, jane.smith@hotmail.com").
    - `_freq`: comma separated number of days before deadline to send reminders (e.g. "1, 2, 5, 10").
 
-Once the data for the reminders has been filled out in the Excel files, and the parameters set in the first script, users can run `1_define_reminder_parameters.R` to conclude the setup of the reminder system. 
+Once the data for the reminders has been filled out in the Excel files, and the parameters set in the first script, you can run `1_define_reminder_parameters.R` to conclude the setup of the reminder system. 
 
 ## Regular usage
 Once the initial set up has been completed, you can add conferences, grants and presentations by modifying the relevant Excel files.
