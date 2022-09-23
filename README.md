@@ -30,6 +30,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     1. `deadline`: Estimated *date* the conference will take place in yyyy_mm_dd text format. This format is used to prevent Excel from automatically changing the date format.
     2. `description`: Description of the conference.
     3. `website`: Conference website.
+    4. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 2. `rem_conference_deadlines.xlsx`: **Conference deadlines**
     1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format.
     2. `notification`: Date notification on admission sent in yyyy_mm_dd text format. Can be NA.
@@ -38,6 +39,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     5. `submission: Link to submit abstract or paper to.
     6. `dead_type`: *abstract* or *paper*.
     7. `website`: Conference website.
+    8. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 3. `rem_upcoming_presentations.xlsx`: **Reminders for upcoming presentations**, including slide submission deadlines
     1. `deadline`: Upcoming presentation date or slide submission deadline in yyyy_mm_dd text format.
     2. `dead_type`: *conference presentation* or *slide submission*.
@@ -49,9 +51,10 @@ You need to modify two sets of files to set up the reminder system. First, one t
     1. `deadline`: Grant deadline in yyyy_mm_dd text format.
     2. `description`: Description of the grant.
     3. `dead_type`: *deliverable*, *proposal* or other (cannot be NA).
-    4. `details`: Details about what the submission requires
+    4. `details`: Details about what the submission requires.
     5. `questions`: Line indicating who to ask conference questions. Can be NA.
-    6. `submission: Link to submit grant deliverable/proposal/etc.
+    6. `submission`: Link to submit grant deliverable/proposal/etc.
+    7.  `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 
 The four Excel files downloaded contain data examples, which must be overwritten before proceeding with the setup. You only need to modify the files for which you will send reminders. For example, if you will not be sending any grant deadline reminders, you can leave the template blank and simply select in the next step that you will not be sending these reminders out.
 
