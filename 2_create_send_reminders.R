@@ -14,7 +14,7 @@ suppressMessages(
   if (!require(pacman)) {install.packages("pacman")}
 )
 pacman::p_load(this.path, gmailr, tidyverse, lubridate,
-               magrittr)
+               magrittr, readxl, writexl)
 options(gargle_oauth_email = TRUE)
 #*************************************************** #
 
@@ -22,7 +22,7 @@ options(gargle_oauth_email = TRUE)
 ##    (1): Define all functions and general parameters.   ##
 ############################################################
 # (1.1): Import parameters as objects. #
-current_params <- read_csv(file.path(this.dir(), "rem_parameters.csv"), col_types = cols())
+current_params <- read_excel(file.path(this.dir(), "rem_parameters.xlsx"))
 for (c in colnames(current_params)) {
   assign(c, current_params %>% pull(c))
 }
@@ -64,11 +64,11 @@ now()
 for (rem in activated_rems) {
   
   # Import reminder file.
-  rem_file <- case_when(rem == "fut_conf" ~ "rem_future_conferences.csv",
-                        rem == "conf_dl" ~ "rem_conference_deadlines.csv",
-                        rem == "grant_dl" ~ "rem_grant_deadlines.csv",
-                        rem == "up_pres" ~ "rem_upcoming_presentations.csv")
-  current_dataset <- read_csv(file.path(this.dir(), rem_file), col_types = cols()) %>% 
+  rem_file <- case_when(rem == "fut_conf" ~ "rem_future_conferences.xlsx",
+                        rem == "conf_dl" ~ "rem_conference_deadlines.xlsx",
+                        rem == "grant_dl" ~ "rem_grant_deadlines.xlsx",
+                        rem == "up_pres" ~ "rem_upcoming_presentations.xlsx")
+  current_dataset <- read_excel(file.path(this.dir(), rem_file)) %>% 
     mutate(deadline = ymd(deadline))
   
   # Define comma separated emails to send reminders.
@@ -190,11 +190,11 @@ for (rem in activated_rems) {
     rm(temp_row, list = current_varnames)
   }
   
-  # Save updated csv.
+  # Save updated Excel
   current_results %<>%
     mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
     mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete),
            deadline = str_replace_all(deadline, "-", "_"))
-  write_csv(current_results, file.path(this.dir(), rem_file))
+  write_xlsx(current_results, file.path(this.dir(), rem_file))
 }
 

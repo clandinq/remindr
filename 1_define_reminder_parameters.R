@@ -8,15 +8,16 @@
 
 #***************** Import packages *****************#
 if (!require(pacman)) {install.packages("pacman")}
-pacman::p_load(this.path, tidyverse)
+pacman::p_load(this.path, tidyverse, writexl)
 #*************************************************** #
 
 ################################################################
 ##    (1): Define reminder parameters: MODIFY THIS SECTION.   ##
 ################################################################
 # (1.1): Define general reminder parameters. #
-# 1. Define short project name (max. 20 characters). For example: "Current RCT".
-proj_name <- "project_name"
+# 1. Define short project name (max. 20 characters). For example: "Health RCT".
+# This is the project name that will be used in email headers.
+proj_name <- "project name"
 
 # 2. Define email to send reminders from and name for signature.
 email_from <- "email"
@@ -85,8 +86,8 @@ current_params <- tibble(proj_name = proj_name,
                          grant_dl_activate = grant_dl_activate,
                          grant_dl_emails = grant_dl_emails,
                          grant_dl_freq = grant_dl_freq)
-write_csv(current_params, file.path(this.dir(), "rem_parameters.csv"))
-    
+write_xlsx(current_params, file.path(this.dir(), "rem_parameters.xlsx"))
+
 # (2.3): If any reminder is activated, set upp reminders depending on operating system. #
 if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate) {
   # Define path of reminder script.
