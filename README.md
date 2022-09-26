@@ -1,5 +1,5 @@
 # remindR
-remindR is a system for automating academic project reminders using R on Mac and Windows. Users can define what kind of reminders they want to obtain, which Gmail address to send the reminders from, and which addresses the reminders will be sent to. This system can help project managers, researchers, research assistants and students keep track of deadlines related to academic projects, reducing the burden of tracking these events manually and the eliminating the possibility of making manual mistakes.
+remindR is a system for automating academic project reminders using R on Mac and Windows. Users can define what kind of reminders they want to obtain, which Gmail address to send the reminders from, and which addresses the reminders will be sent to. This system can help project managers, researchers, research assistants and students keep track of deadlines related to academic projects, reducing the burden of tracking these events manually and the eliminating the possibility of making manual mistakes. remindR uses packages [cronR](https://github.com/bnosac/cronR) (Mac OS X) and [taskscheduleR](https://github.com/bnosac/taskscheduleR) (Windows) to schedule recurring tasks.
 
 This system can send out four types of reminders:
 
@@ -36,7 +36,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     2. `notification`: Date notification on admission sent in yyyy_mm_dd text format. Can be NA.
     3. `description`: Description of the conference.
     4. `questions`: Line indicating who to ask conference questions. Can be NA.
-    5. `submission: Link to submit abstract or paper to.
+    5. `submission`: Link to submit abstract or paper to.
     6. `dead_type`: *abstract* or *paper*.
     7. `website`: Conference website.
     8. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
@@ -44,7 +44,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     1. `deadline`: Upcoming presentation date or slide submission deadline in yyyy_mm_dd text format.
     2. `dead_type`: *conference presentation* or *slide submission*.
     3. `description`: Description of the conference.
-    4. `submission: Link to submit slides to. Can be NA if `dead_type`="conference presentation".
+    4. `submission`: Link to submit slides to. Can be NA if `dead_type`="conference presentation".
     5. `website`: Conference website.
     6. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 4. `rem_grant_deadlines.xlsx`: **Grant deadlines**
