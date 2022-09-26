@@ -117,7 +117,7 @@ Second, general project and specific reminder parameters need to be set in scrip
    - `proj_name`: define a short project name to be used in email headers.
    - `email_from`: a Gmail address to send emails from.
    - `name_from`: name to use for email signature.
-   - `secret_path`: absolute path to Gmail client secret generated in previous section.
+   - `secret_path`: absolute path to Gmail client secret generated in [previous section](https://github.com/clandinq/remindr/blob/main/README.md#3-set-up-gmail-api-and-oauth-consent-screen).
 
 2. **Specific reminder parameters**. These are individual to each reminder.
 
