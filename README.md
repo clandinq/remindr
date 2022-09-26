@@ -101,11 +101,12 @@ The four Excel files downloaded contain data examples, which must be overwritten
 
 			<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_3.png" align="center" height="30%" width="30%">
 		
-	    3. Click on **Publish App**.
+	    3. Continue until the Summary step and click on **Back to Dashboard**. 
+
+	    4. Click on **Publish App**.
 	    
 			<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_5.png" align="center" height="30%" width="30%">
 
-	    5. Continue until the Summary step and click on **Back to Dashboard**. 
     4. Select again **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials** and select **OAuth client ID**.
     5. Select Desktop App and name the app as remindR.
 
