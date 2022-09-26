@@ -20,6 +20,8 @@ First clone the repo locally into the desired project folder. This system works 
 ```r
 cd Work/health_rct
 git clone https://github.com/clandinq/remindr reminders
+cd reminders
+rm pictures/
 ```
 This will download 2 scripts, 5 .xlsx files, this readme and a .Rproj file. 
 
@@ -58,7 +60,37 @@ You need to modify two sets of files to set up the reminder system. First, one t
 
 The four Excel files downloaded contain data examples, which must be overwritten before proceeding with the setup. You only need to modify the files for which you will send reminders. For example, if you will not be sending any grant deadline reminders, you can leave the template blank and simply select in the next step that you will not be sending these reminders out.
 
-### 3. Define reminder parameters
+### 3. Set up Gmail API and OAuth consent screen
+1. **Set up project and enable the Gmail API**
+    1. Open and log into the [Google Cloud Console](https://console.cloud.google.com/).
+    2. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project) and name the project "remindR".
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_1.png" align="center" height="60%" width="60%">
+    3. Select your project on the top left dropdown menu.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_2.png" align="center" height="40%" width="40%">
+    4. Click on **APIs & Services** > **Enabled APIs services**.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_3.png" align="center" height="50%" width="50%">
+    5. Click on **+ Enable APIs and Services**.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_4.png" align="center" height="50%" width="50%">
+    6. Look up and select **Gmail API**.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_5.png" align="center" height="60%" width="60%">
+    7. Enable the Gmail API.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_6.png" align="center" height="40%" width="40%">
+    
+2. **Configure OAuth consent screen and obtain credentials**
+    1. On the top-left menu, click **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials**.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_1.png" align="center" height="50%" width="50%">
+    2. Configure your consent screen
+	    1. Select user type **External**.
+            <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_2.png" align="center" height="50%" width="50%">
+    	2. Name the app "remindR" and select your email as the support email address.
+            <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_3.png" align="center" height="50%" width="50%">
+	    3. Continue until the Summary step and click on **Back to Dashboard**. 
+    4. Select again **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials** and select **OAuth client ID**.
+    5. Select Desktop App and name the app as remindR.
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_4.png" align="center" height="50%" width="50%">
+    6. Download client secret JSON file and store in a local folder (write down the name of the file and the location).
+
+### 4. Define reminder parameters
 Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. 
 
 1. **General project parameters**. These apply for all reminders in a project.
@@ -66,13 +98,7 @@ Second, general project and specific reminder parameters need to be set in scrip
    - `proj_name`: define a short project name to be used in email headers.
    - `email_from`: a Gmail address to send emails from.
    - `name_from`: name to use for email signature.
-   - `secret_path`: absolute path to Gmail client secret. To obtain a Gmail API OAuth ID, follow the following steps:
-
-     1. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project).
-     2. Open [Google Cloud Console](https://console.cloud.google.com/).
-     3. At the top-left, click **Menu** > **APIs & Services** > **Credentials**.
-     4. Click on **Create Credentials** > **OAuth client ID**. Select "Desktop app".
-     5. Download client secret JSON file.
+   - `secret_path`: absolute path to Gmail client secret generated in previous section.
 
 2. **Specific reminder parameters**. These are individual to each reminder.
 
