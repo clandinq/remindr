@@ -64,30 +64,40 @@ The four Excel files downloaded contain data examples, which must be overwritten
 1. **Set up project and enable the Gmail API**
     1. Open and log into the [Google Cloud Console](https://console.cloud.google.com/).
     2. [Create a Google Cloud project](https://developers.google.com/workspace/guides/create-project) and name the project "remindR".
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_1.png" align="center" height="60%" width="60%">
+
+        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_1.png" align="center" height="40%" width="40%">
     3. Select your project on the top left dropdown menu.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_2.png" align="center" height="40%" width="40%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_2.png" align="center" height="20%" width="20%">
     4. Click on **APIs & Services** > **Enabled APIs services**.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_3.png" align="center" height="50%" width="50%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_3.png" align="center" height="30%" width="30%">
     5. Click on **+ Enable APIs and Services**.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_4.png" align="center" height="50%" width="50%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_4.png" align="center" height="30%" width="30%">
     6. Look up and select **Gmail API**.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_5.png" align="center" height="60%" width="60%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_5.png" align="center" height="40%" width="40%">
     7. Enable the Gmail API.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_6.png" align="center" height="40%" width="40%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gproj_6.png" align="center" height="20%" width="20%">
     
 2. **Configure OAuth consent screen and obtain credentials**
     1. On the top-left menu, click **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials**.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_1.png" align="center" height="50%" width="50%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_1.png" align="center" height="30%" width="30%">
     2. Configure your consent screen
 	    1. Select user type **External**.
-            <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_2.png" align="center" height="50%" width="50%">
-    	2. Name the app "remindR" and select your email as the support email address.
-            <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_3.png" align="center" height="50%" width="50%">
+
+		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_2.png" align="center" height="30%" width="30%">
+	    2. Name the app "remindR" and select your email as the support email address.
+
+		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_3.png" align="center" height="30%" width="30%">
 	    3. Continue until the Summary step and click on **Back to Dashboard**. 
     4. Select again **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials** and select **OAuth client ID**.
     5. Select Desktop App and name the app as remindR.
-        <img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_4.png" align="center" height="50%" width="50%">
+
+	<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_4.png" align="center" height="50%" width="50%">
     6. Download client secret JSON file and store in a local folder (write down the name of the file and the location).
 
 ### 4. Define reminder parameters
