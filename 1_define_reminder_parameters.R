@@ -15,9 +15,9 @@ pacman::p_load(this.path, tidyverse, writexl)
 ##    (1): Define reminder parameters: MODIFY THIS SECTION.   ##
 ################################################################
 # (1.1): Define general reminder parameters. #
-# 1. Define short project name (max. 20 characters). For example: "Health RCT".
+# 1. Define short project name (preferably <= 20 characters). For example: "Health RCT".
 # This is the project name that will be used in email headers.
-proj_name <- "project name"
+proj_name <- "Project Name"
 
 # 2. Define email to send reminders from and name for signature.
 email_from <- "email"
@@ -104,20 +104,16 @@ if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate)
     pacman::p_load(taskscheduleR)
     # Run reminders at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
     reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
-    taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders_10"), 
-                         schedule = "DAILY", 
-                         starttime = "10:00", 
-                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
-    taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders_14"), 
-                         schedule = "DAILY", 
-                         starttime = "14:00",
-                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
-    taskscheduler_create(rscript = reminder_script, 
-                         taskname = paste0(proj_name, "_reminders_18"), 
-                         schedule = "DAILY", 
-                         starttime = "18:00",
-                         startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"))
+    proj_name_nospaces <- str_replace(proj_name, fixed(" "), "_")
+    # Remove previously defined tasks and define new tasks.
+    for (t in c(10, 14, 18)) {
+      suppressWarnings(taskscheduler_delete(proj_name_nospaces))
+      taskscheduler_create(rscript = reminder_script, 
+                           taskname = str_c(proj_name_nospaces, "_reminders_", t), 
+                           schedule = "DAILY", 
+                           starttime = str_c(t, ":00"), 
+                           startdate = format(as.Date("2022-01-01"), "%d/%m/%Y"),
+                           schtasks_extra = "/NP")
+    }
   }
 }

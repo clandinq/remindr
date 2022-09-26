@@ -29,6 +29,7 @@ for (c in colnames(current_params)) {
 
 # (1.2): Authenticate client secret. #
 gm_auth_configure(path = secret_path)
+gm_auth(email = email_from)
 
 # (1.3): Define current date. #
 todays_date <- lubridate::today()
