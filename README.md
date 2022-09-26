@@ -101,7 +101,11 @@ The four Excel files downloaded contain data examples, which must be overwritten
 
 			<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_3.png" align="center" height="30%" width="30%">
 		
-	    3. Continue until the Summary step and click on **Back to Dashboard**. 
+	    3. Click on **Publish App**.
+	    
+			<img src="https://github.com/clandinq/remindr/blob/main/pictures/gauth_5.png" align="center" height="30%" width="30%">
+
+	    5. Continue until the Summary step and click on **Back to Dashboard**. 
     4. Select again **Menu** > **APIs & Services** > **Credentials** > **+ Create Credentials** and select **OAuth client ID**.
     5. Select Desktop App and name the app as remindR.
 
@@ -109,6 +113,19 @@ The four Excel files downloaded contain data examples, which must be overwritten
 	
     6. Download client secret JSON file and store in a local folder (write down the name of the file and the location).
 
+3. ** Allow access to your account from R**
+    1. Run until line 32 of script 2_create_send_reminders.R. A window will open asking for your Gmail login information. Select your Google account.
+    
+		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_1.png" align="center" height="30%" width="30%">
+
+    2. Allow access to your account.
+    
+    		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_2.png" align="center" height="30%" width="30%">
+    
+    3. You will receive a confirmation message on R once authentication is complete.
+
+    		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_3.png" align="center" height="20%" width="20%">
+ 
 ### 4. Define reminder parameters
 Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. 
 
