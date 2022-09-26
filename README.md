@@ -121,11 +121,11 @@ The four Excel files downloaded contain data examples, which must be overwritten
 
     2. Allow access to your account.
     
-    		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_2.png" align="center" height="30%" width="30%">
+		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_2.png" align="center" height="20%" width="20%">
     
     3. You will receive a confirmation message on R once authentication is complete.
 
-    		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_3.png" align="center" height="20%" width="20%">
+		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_3.png" align="center" height="20%" width="20%">
  
 ### 4. Define reminder parameters
 Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. 
