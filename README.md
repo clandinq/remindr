@@ -21,7 +21,7 @@ First clone the repo locally into the desired project folder. This system works 
 cd Work/health_rct
 git clone https://github.com/clandinq/remindr reminders
 cd reminders
-rm pictures/
+rm -r pictures/
 ```
 This will download 2 scripts, 5 .xlsx files, this readme and a .Rproj file. 
 
