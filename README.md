@@ -114,7 +114,7 @@ The four Excel files downloaded contain data examples, which must be overwritten
 	
     6. Download client secret JSON file and store in a local folder (write down the name of the file and the location).
 
-3. ** Allow access to your account from R**
+3. **Allow access to your account from R**
     1. Run until line 32 of script 2_create_send_reminders.R. A window will open asking for your Gmail login information. Select your Google account.
     
 		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_1.png" align="center" height="30%" width="30%">
