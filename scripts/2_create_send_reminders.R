@@ -22,7 +22,8 @@ options(gargle_oauth_email = TRUE)
 ##    (1): Define all functions and general parameters.   ##
 ############################################################
 # (1.1): Import parameters as objects. #
-current_params <- read_excel(file.path(this.dir(), "rem_parameters.xlsx"))
+root_path <- str_replace(this.dir(), fixed("/scripts"), "")
+current_params <- read_excel(file.path(root_path, "data", "rem_parameters.xlsx"))
 for (c in colnames(current_params)) {
   assign(c, current_params %>% pull(c))
 }
@@ -69,7 +70,7 @@ for (rem in activated_rems) {
                         rem == "conf_dl" ~ "rem_conference_deadlines.xlsx",
                         rem == "grant_dl" ~ "rem_grant_deadlines.xlsx",
                         rem == "up_pres" ~ "rem_upcoming_presentations.xlsx")
-  current_dataset <- read_excel(file.path(this.dir(), rem_file)) %>% 
+  current_dataset <- read_excel(file.path(root_path, "data", rem_file)) %>% 
     mutate(deadline = ymd(deadline))
   
   # Define comma separated emails to send reminders.
@@ -196,6 +197,6 @@ for (rem in activated_rems) {
     mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
     mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete),
            deadline = str_replace_all(deadline, "-", "_"))
-  write_xlsx(current_results, file.path(this.dir(), rem_file))
+  write_xlsx(current_results, file.path(root_path, "data", rem_file))
 }
 

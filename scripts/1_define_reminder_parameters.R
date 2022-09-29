@@ -86,12 +86,13 @@ current_params <- tibble(proj_name = proj_name,
                          grant_dl_activate = grant_dl_activate,
                          grant_dl_emails = grant_dl_emails,
                          grant_dl_freq = grant_dl_freq)
-write_xlsx(current_params, file.path(this.dir(), "rem_parameters.xlsx"))
+root_path <- str_replace(this.dir(), fixed("/scripts"), "")
+write_xlsx(current_params, file.path(root_path, "data", "rem_parameters.xlsx"))
 
 # (2.3): If any reminder is activated, set upp reminders depending on operating system. #
 if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate) {
   # Define path of reminder script.
-  reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
+  reminder_script <- file.path(root_path, "scripts", "2_create_send_reminders.R")
   # Define current OS and set reminders.
   if (define_os() == "mac") {
     pacman::p_load(cronR)
@@ -103,7 +104,7 @@ if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate)
   } else if (define_os() == "windows") {
     pacman::p_load(taskscheduleR)
     # Run reminders at 10:00, 14:00 and 18:00. Why? In case one reminder fails to send.
-    reminder_script <- file.path(this.dir(), "2_create_send_reminders.R")
+    reminder_script <- file.path(root_path, "scripts", "2_create_send_reminders.R")
     proj_name_nospaces <- str_replace(proj_name, fixed(" "), "_")
     # Remove previously defined tasks and define new tasks.
     for (t in c(10, 14, 18)) {
