@@ -55,7 +55,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
 4. `rem_grant_deadlines.xlsx`: **Grant deadlines**
     1. `deadline`: Grant deadline in yyyy_mm_dd text format.
     2. `description`: Description of the grant.
-    3. `dead_type`: *deliverable*, *proposal* or other (cannot be NA).
+    3. `dead_type`: *deliverable*, *proposal* or other (cannot be blank).
     4. `details`: Details about what the submission requires.
     5. `questions`: Line indicating who to ask conference questions. Can be left blank.
     6. `submission`: Link to submit grant deliverable/proposal/etc.
