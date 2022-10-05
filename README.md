@@ -11,6 +11,8 @@ This system can send out four types of reminders:
 3. **Upcoming presentations**. Reminders for upcoming presentations, including slide submission deadlines.
 4. **Grant deadlines**. This can be useful both when applying for grants and when submitting grant deliverables.
 
+The original version for Mac OS X was developed by [César Landín](github.com/clandinq), and the Windows version developed joint with [Vicente Corral](github.com/vicentecorral).
+
 ## Set up
 There are three steps for setting up the remindR system:
 1. Clone the repo to your project folder
