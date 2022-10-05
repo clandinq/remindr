@@ -17,7 +17,8 @@ The original version for Mac OS X was developed by [César Landín](github.com/c
 There are three steps for setting up the remindR system:
 1. Clone the repo to your project folder
 2. Fill out conference, grant and presentation information
-3. Define reminder parameters
+3. Set up Gmail API and OAuth consent screen
+4. Define reminder parameters
 
 ### 1. Clone the repo
 First clone the repo locally into the desired project folder. This system works best with the folder structure defined by [Sean Higgins](https://seankhiggins.com/) in his [R guide](https://github.com/skhiggins/r_guide). The recommendation is to add the system to the Dropbox folder so that all project members (including those not using GitHub) can see programmed events in the reminder datasets. For example, below is a brief example of the terminal commands to clone a project titled "Health RCT".
@@ -133,7 +134,7 @@ The four Excel files downloaded contain data examples, which must be overwritten
 		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_3.png" align="center" height="20%" width="20%">
  
 ### 4. Define reminder parameters
-Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. This script can be found in the folder `scripts`.
+Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. This script can be found in the folder `scripts`. **If using Windows, you must open R with administrator privileges (right click on the R icon) in order for the script to run properly**.
 
 1. **General project parameters**. These apply for all reminders in a project.
    
