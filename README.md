@@ -40,7 +40,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     3. `website`: Conference website.
     4. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 2. `rem_conference_deadlines.xlsx`: **Conference deadlines**
-    1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format.
+    1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format. **If the deadline is before midnight local time (where the reminders are running), set the deadline as one day before.**
     2. `notification`: Date notification on admission sent in yyyy_mm_dd text format. Can be left blank.
     3. `description`: Description of the conference.
     4. `questions`: Line indicating who to ask conference questions. Can be left blank.
@@ -57,7 +57,7 @@ You need to modify two sets of files to set up the reminder system. First, one t
     6. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 4. `rem_grant_deadlines.xlsx`: **Grant deadlines**
     1. `deadline`: Grant deadline in yyyy_mm_dd text format.
-    2. `description`: Description of the grant.
+    2. `description`: Description of the grant. **Specify the deadline’s time and date in the description.** For example: *Financial Economics grant (due on 2022-12-03 18:00 CST).*
     3. `dead_type`: *deliverable*, *proposal* or other (cannot be blank).
     4. `details`: Details about what the submission requires.
     5. `questions`: Line indicating who to ask conference questions. Can be left blank.
