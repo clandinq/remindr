@@ -1,4 +1,4 @@
-#********************************************************************************************
+#--------------------------------------------------------------------------------------------
 # File name: 		      2_create_send_reminders.R
 # Creation date:      2022-03-22
 # Author:          		César Landín
@@ -7,16 +7,13 @@
 #     1. Reminders to check if future conferences have announced submission deadlines,
 #     2. Reminders to send an abstract or paper to a conference,
 #     3. Reminders to prepare slides for conferences.
-#********************************************************************************************
+#--------------------------------------------------------------------------------------------
 
-#***************** Import packages *****************#
-suppressMessages(
-  if (!require(pacman)) {install.packages("pacman")}
-)
+#################### Import packages #################### 
 pacman::p_load(this.path, gmailr, tidyverse, lubridate,
                magrittr, readxl, writexl)
 options(gargle_oauth_email = TRUE)
-#*************************************************** #
+#########################################################
 
 ############################################################
 ##    (1): Define all functions and general parameters.   ##
@@ -63,21 +60,22 @@ exists_not_na <- function(string) {
 #########################################################
 # (2.1): Loop over reminder types. #
 now()
-for (rem in activated_rems) {
+for (rem_type in activated_rems) {
   
   # Import reminder file.
-  rem_file <- case_when(rem == "fut_conf" ~ "rem_future_conferences.xlsx",
-                        rem == "conf_dl" ~ "rem_conference_deadlines.xlsx",
-                        rem == "grant_dl" ~ "rem_grant_deadlines.xlsx",
-                        rem == "up_pres" ~ "rem_upcoming_presentations.xlsx")
+  rem_file <- case_when(rem_type == "fut_conf" ~ "rem_future_conferences.xlsx",
+                        rem_type == "conf_dl" ~ "rem_conference_deadlines.xlsx",
+                        rem_type == "grant_dl" ~ "rem_grant_deadlines.xlsx",
+                        rem_type == "up_pres" ~ "rem_upcoming_presentations.xlsx")
   current_dataset <- read_excel(file.path(root_path, "data", rem_file)) %>% 
-    mutate(deadline = ymd(deadline))
+    mutate(deadline = ymd(deadline)) %>% 
+    arrange(deadline)
   
   # Define comma separated emails to send reminders.
-  current_emails <- eval(as.name(paste0(rem, "_emails")))
-
+  current_emails <- eval(as.name(str_c(rem_type, "_emails")))
+  
   # Define reminder frequencies.
-  current_freq <- eval(as.name(paste0(rem, "_freq"))) %>% 
+  current_freq <- eval(as.name(str_c(rem_type, "_freq"))) %>% 
     str_split(",") %>% 
     unlist() %>% 
     as.numeric()
@@ -97,6 +95,7 @@ for (rem in activated_rems) {
     current_varnames <- colnames(current_dataset)
     
     # Check if reminders need to be sent if not marked as complete.
+    if (is.na(complete)) {complete <- 0}
     if (complete == 0) {
       
       # Loop over reminder frequencies.
@@ -105,98 +104,140 @@ for (rem in activated_rems) {
         
         # Define time until deadline and reminder title.
         dead_type <- ifelse(exists_not_na("dead_type"), dead_type, "")
-        rem_description <- case_when(rem == "fut_conf" ~ "predicted deadline",
-                                     rem == "conf_dl" ~ "paper submission deadline",
-                                     rem == "grant_dl" ~ paste("grant", dead_type, "deadline"),
-                                     rem == "up_pres" ~ dead_type)
+        rem_description <- case_when(rem_type == "fut_conf" ~ "predicted deadline",
+                                     rem_type == "conf_dl" ~ "paper submission deadline",
+                                     rem_type == "grant_dl" ~ paste("grant", dead_type, "deadline"),
+                                     rem_type == "up_pres" ~ 
+                                       case_when(dead_type == "General presentation reminder" ~ "conference presentation",
+                                                 dead_type == "Reminder to submit paper" ~ "conference paper submission deadline",
+                                                 dead_type == "Reminder to submit slides" ~ "conference slide submission deadline"))
         
+        # Define email titles.
         if (f == 0) {
           time_until_deadline <- "today"
-          rem_title <- paste0("FINAL REMINDER - ", str_to_upper(rem_description), " TODAY")
+          rem_title <- str_c("FINAL REMINDER - ", str_to_upper(rem_description), " TODAY")
         } else if (f >= 1 & f < 7) {
-          time_until_deadline <- paste0(f, " days")
-          rem_title <- paste0(str_to_upper(rem_description), " IN ", str_to_upper(clean_days_s(time_until_deadline)))
+          time_until_deadline <- str_c(f, " days")
+          rem_title <- str_c(str_to_upper(rem_description), " IN ", str_to_upper(clean_days_s(time_until_deadline)))
         } else if (f >= 7 & f < 29) {
-          time_until_deadline <- paste0(round(time_length(days(f), unit = "weeks"), 0), " weeks")
+          time_until_deadline <- str_c(round(time_length(days(f), unit = "weeks"), 0), " weeks")
           rem_title <- paste("Upcoming", rem_description)
         } else if (f >= 29) {
-          time_until_deadline <- paste0(round(time_length(days(f), unit = "months"), 0), " months")
+          time_until_deadline <- str_c(round(time_length(days(f), unit = "months"), 0), " months")
           rem_title <- paste("Upcoming", rem_description)
         }
         
         # Future conference reminders have same format independent of time to conference.
-        rem_title <- ifelse(rem == "fut_conf", "Upcoming predicted conference deadline", rem_title)
+        rem_title <- ifelse(rem_type == "fut_conf", "Upcoming predicted conference deadline", rem_title)
         
         # Paste full email title.
-        rem_title <- paste0(proj_name, " //// ", rem_title, ": ", as.character(deadline))
+        rem_title <- str_c(proj_name, " //// ", rem_title, ": ", as.character(deadline))
         
         # Check if reminder exists / has been sent. If doesn't exist, it hasn't been sent.
-        notif_varname <- paste0("notif_", str_replace(time_until_deadline, " ", ""))
+        notif_varname <- str_c("notif_", str_replace(time_until_deadline, " ", ""))
         rem_sent <- tryCatch((eval(as.name(notif_varname)) == 1),
                              error = function(e) {FALSE})
         
         # Send reminders depending on dates and reminder status.
         if (!rem_sent & # (1) reminder not sent yet, 
             sent_email == 0 & # (2) an email for same conference / presentation hasn't been sent in current run, and
-            (deadline - todays_date) >= 0 & (deadline - todays_date) <= f) { # (3) within timeframe to send reminder
-          
-          # Assign reminder variable and add to list of variables to export.
-          assign(notif_varname, 1)
-          
-          # Define reminder text.
-          rem_text <- paste0("<html><body>",
-                             "Hi all, <br><br>",
-                             "This is an automated reminder that the ", description,
-                             ifelse(rem == "up_pres", 
-                                    paste0(" will take place on ", deadline, ". <br><br>"),
-                                    paste0(" has a ", rem_description, " coming up on ", deadline, ". <br><br>")),
-                             ifelse(rem == "grant_dl",
-                                    paste0("This grant requires the following deliverable: <br><br>", details, "<br><br>"), ""),
-                             ifelse(exists_not_na("submission"), 
-                                    ifelse(dead_type != "conference",
-                                           paste("Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>"), ""),
-                                    ""),
-                             ifelse(exists_not_na("website"), paste0("For more information, please refer to ", website, ". <br><br>"), ""),
-                             ifelse(exists_not_na("questions"), paste0("For any questions, please contact ", questions, ". <br><br>"), ""),
-                             "Best, <br><br>",
-                             name_from,
-                             "</body></html>")
-          
-          # Prepare and send email.
-          email_body <-
-            gm_mime() %>%
-            gm_to(current_emails) %>%  
-            gm_from(email_from) %>%
-            gm_subject(rem_title) %>%
-            gm_html_body(rem_text)
-          gm_send_message(email_body)
-          
-          # Flag email sent.
-          print(paste(rem, "email sent"))
-          sent_email <- 1
-          
-          # Alternative: reminder hasn't been sent but deadline still in future -> sent reminder as 0.
-        } else if (!rem_sent & (deadline - todays_date) > f) {
-          assign(notif_varname, 0)
-        }
+            # (deadline - todays_date) >= 0 & (deadline - todays_date) <= f) { # (3) within timeframe to send reminder
+            # (3) within timeframe to send reminder
+            (deadline
+             today(tzone = "Australia/Sydney")
+             # Assign reminder variable and add to list of variables to export.
+             assign(notif_varname, 1)
+             
+             # Define reminder text.
+             if (rem_type == "fut_conf") {
+               # FUTURE CONFERENCE REMINDERS
+               rem_text <- str_c("<html><body>",
+                                 "Hello, <br><br>",
+                                 "This is an automated reminder that the ", description, " is predicted to take place on ", conf_date, ". <br><br>",
+                                 "Please remember to check the website for up to date conference information: ", website, " <br><br>",
+                                 "Best, <br><br>",
+                                 name_from,
+                                 "</body></html>")
+             } else if (rem_type == "conf_dl") {
+               # CONFERENCE DEADLINE REMINDERS
+               rem_text <- str_c("<html><body>",
+                                 "Hello, <br><br>",
+                                 "This is an automated reminder that the ", description, " has ",
+                                 case_when(dead_type == "Abstract" ~ "an abstract",
+                                           dead_type == "Paper" ~ "a paper"),
+                                 "submission deadline coming up on ", deadline, ". <br><br>",
+                                 "Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>",
+                                 ifelse(exists_not_na("website"), str_c("For more information, please refer to ", website, ". <br><br>"), ""),
+                                 ifelse(exists_not_na("questions"), str_c("For any questions, please contact ", questions, ". <br><br>"), ""),
+                                 "Best, <br><br>",
+                                 name_from,
+                                 "</body></html>")
+             } else if (rem_type == "up_pres") {
+               rem_text <- str_c("<html><body>",
+                                 "Hello, <br><br>",
+                                 "This is an automated reminder that the ", description, " is going to take place soon. <br><br>",
+                                 case_when(dead_type == "General presentation reminder" ~
+                                           "No further action is needed at this time. <br><br>",
+                                           dead_type == "Reminder to submit paper" ~
+                                           "Please remember to submit the paper to ", submission, " as soon as possible. <br><br>",
+                                           dead_type == "Reminder to submit slides" ~
+                                           "Please remember to submit the slides to ", submission, " as soon as possible. <br><br>"),
+                                 ifelse(exists_not_na("website"), str_c("For more information, please refer to ", website, ". <br><br>"), ""),
+                                 "Best, <br><br>",
+                                 name_from,
+                                 "</body></html>")
+               
+             } else if (rem_type == "grant_dl") {
+               rem_text <- str_c("<html><body>",
+                                 "Hello, <br><br>",
+                                 "This is an automated reminder that the ", description,  " has ",
+                                 case_when(dead_type == "Deliverable reminder" ~ "a deliverable",
+                                           dead_type == "Proposal reminder" ~ "a proposal"),
+                                 "submission deadline coming up on ", deadline, ". <br><br>",
+                                 ifelse(!is.na(details) & details != "",
+                                        str_c("This grant requires the following: <br><br>", details, "<br><br>"), ""),
+                                 "Please remember to submit the ", str_to_lower(str_remove(dead_type, " reminder")), " to ", submission, " as soon as possible. <br><br>",
+                                 ifelse(exists_not_na("questions"), str_c("For any questions, please contact ", questions, ". <br><br>"), ""),
+                                 "Best, <br><br>",
+                                 name_from,
+                                 "</body></html>")
+             }
+             
+             # Prepare and send email.
+             email_body <-
+               gm_mime() %>%
+               gm_to(current_emails) %>%  
+               gm_from(email_from) %>%
+               gm_subject(rem_title) %>%
+               gm_html_body(rem_text)
+             gm_send_message(email_body)
+             
+             # Flag email sent.
+             print(paste(rem, "email sent"))
+             sent_email <- 1
+             
+             # Alternative: reminder hasn't been sent but deadline still in future -> sent reminder as 0.
+      } else if (!rem_sent & (deadline - todays_date) > f) {
+        assign(notif_varname, 0)
       }
     }
-    
-    # Append notification variables to list of current variable names.
-    current_varnames <- c(current_varnames, ls()[str_detect(ls(), "notif") & !str_detect(ls(), "varname")]) %>% unique()
-    
-    # Save current parameters in dataframe.
-    temp_row <- mget(current_varnames) %>% 
-      as_tibble()
-    current_results %<>% bind_rows(temp_row)
-    rm(temp_row, list = current_varnames)
   }
   
-  # Save updated Excel
-  current_results %<>%
-    mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
-    mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete),
-           deadline = str_replace_all(deadline, "-", "_"))
-  write_xlsx(current_results, file.path(root_path, "data", rem_file))
+  # Append notification variables to list of current variable names.
+  current_varnames <- c(current_varnames, ls()[str_detect(ls(), "notif") & !str_detect(ls(), "varname")]) %>% unique()
+  
+  # Save current parameters in dataframe.
+  temp_row <- mget(current_varnames) %>% 
+    as_tibble()
+  current_results %<>% bind_rows(temp_row)
+  rm(temp_row, list = current_varnames)
+}
+
+# Save updated Excel
+current_results %<>%
+  mutate_at(vars(starts_with("notif_")), ~ifelse(is.na(.), 1, .)) %>% 
+  mutate(complete = ifelse(rowSums(across(starts_with("notif_"))) == length(current_freq), 1, complete),
+         deadline = str_replace_all(deadline, "-", "_"))
+write_xlsx(current_results, file.path(root_path, "data", rem_file))
 }
 

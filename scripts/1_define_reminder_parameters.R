@@ -1,15 +1,14 @@
-#********************************************************************************************
+#--------------------------------------------------------------------------------------------
 # File name: 		      1_define_reminer_parameters
 # Creation date:      2022-03-22
 # Author:          		César Landín
 # Purpose:
 # 	- Define reminder parameters and automate reminders.
-#********************************************************************************************
+#--------------------------------------------------------------------------------------------
 
-#***************** Import packages *****************#
-if (!require(pacman)) {install.packages("pacman")}
+#################### Import packages #################### 
 pacman::p_load(this.path, tidyverse, writexl)
-#*************************************************** #
+#########################################################
 
 ################################################################
 ##    (1): Define reminder parameters: MODIFY THIS SECTION.   ##
@@ -89,7 +88,7 @@ current_params <- tibble(proj_name = proj_name,
 root_path <- str_replace(this.dir(), fixed("/scripts"), "")
 write_xlsx(current_params, file.path(root_path, "data", "rem_parameters.xlsx"))
 
-# (2.3): If any reminder is activated, set upp reminders depending on operating system. #
+# (2.3): If any reminder is activated, set up reminders depending on operating system. #
 if (fut_conf_activate + conf_dl_activate + up_pres_activate + grant_dl_activate) {
   # Define path of reminder script.
   reminder_script <- file.path(root_path, "scripts", "2_create_send_reminders.R")
