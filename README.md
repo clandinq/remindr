@@ -11,11 +11,14 @@ This system can send out four types of reminders:
 3. **Upcoming presentations**. Reminders for upcoming presentations, including slide submission deadlines.
 4. **Grant deadlines**. This can be useful both when applying for grants and when submitting grant deliverables.
 
+The original version for Mac OS X was developed by [César Landín](github.com/clandinq), and the Windows version developed joint with [Vicente Corral](github.com/vicentecorral).
+
 ## Set up
 There are three steps for setting up the remindR system:
 1. Clone the repo to your project folder
 2. Fill out conference, grant and presentation information
-3. Define reminder parameters
+3. Set up Gmail API and OAuth consent screen
+4. Define reminder parameters
 
 ### 1. Clone the repo
 First clone the repo locally into the desired project folder. This system works best with the folder structure defined by [Sean Higgins](https://seankhiggins.com/) in his [R guide](https://github.com/skhiggins/r_guide). The recommendation is to add the system to the Dropbox folder so that all project members (including those not using GitHub) can see programmed events in the reminder datasets. For example, below is a brief example of the terminal commands to clone a project titled "Health RCT".
@@ -29,7 +32,7 @@ rm -r pictures/
 This will download 2 scripts, 5 .xlsx files, this readme and a .Rproj file. 
 
 ### 2. Fill out Excel files with conference, grant and presentation information
-You need to modify two sets of files to set up the reminder system. First, one to four .xlsx files containing details about conferences, grants and presentations, that will be used to send the reminders. The files and variables are:
+You need to modify two sets of files to set up the reminder system. First, one to four .xlsx files containing details about conferences, grants and presentations, that will be used to send the reminders. All files are included in the folder `data`. The files and variables are:
 
 1. `rem_future_conferences.xlsx`: **Future conference reminders**
     1. `deadline`: Estimated *date* the conference will take place in yyyy_mm_dd text format. This format is used to prevent Excel from automatically changing the date format.
@@ -37,10 +40,10 @@ You need to modify two sets of files to set up the reminder system. First, one t
     3. `website`: Conference website.
     4. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 2. `rem_conference_deadlines.xlsx`: **Conference deadlines**
-    1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format.
-    2. `notification`: Date notification on admission sent in yyyy_mm_dd text format. Can be NA.
+    1. `deadline`: Conference abstract or paper submission deadline in yyyy_mm_dd text format. **If the deadline is before midnight local time (where the reminders are running), set the deadline as one day before.**
+    2. `notification`: Date notification on admission sent in yyyy_mm_dd text format. Can be left blank.
     3. `description`: Description of the conference.
-    4. `questions`: Line indicating who to ask conference questions. Can be NA.
+    4. `questions`: Line indicating who to ask conference questions. Can be left blank.
     5. `submission`: Link to submit abstract or paper to.
     6. `dead_type`: *abstract* or *paper*.
     7. `website`: Conference website.
@@ -49,15 +52,15 @@ You need to modify two sets of files to set up the reminder system. First, one t
     1. `deadline`: Upcoming presentation date or slide submission deadline in yyyy_mm_dd text format.
     2. `dead_type`: *conference presentation* or *slide submission*.
     3. `description`: Description of the conference.
-    4. `submission`: Link to submit slides to. Can be NA if `dead_type`="conference presentation".
+    4. `submission`: Link to submit slides to. Can be left blank if `dead_type`="conference presentation".
     5. `website`: Conference website.
     6. `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 4. `rem_grant_deadlines.xlsx`: **Grant deadlines**
     1. `deadline`: Grant deadline in yyyy_mm_dd text format.
-    2. `description`: Description of the grant.
-    3. `dead_type`: *deliverable*, *proposal* or other (cannot be NA).
+    2. `description`: Description of the grant. **Specify the deadline’s time and date in the description.** For example: *Financial Economics grant (due on 2022-12-03 18:00 CST).*
+    3. `dead_type`: *deliverable*, *proposal* or other (cannot be blank).
     4. `details`: Details about what the submission requires.
-    5. `questions`: Line indicating who to ask conference questions. Can be NA.
+    5. `questions`: Line indicating who to ask conference questions. Can be left blank.
     6. `submission`: Link to submit grant deliverable/proposal/etc.
     7.  `complete`: This variable defines whether reminders need to be sent or not. If all scheduled reminders have been sent, it is marked as complete (`complete = 1`). The default value is `complete = 0`. Set `complete = 1` in the Excel document if it is not necessary to send this set of reminders anymore (for example, when completing a submission before the final reminder).
 
@@ -131,7 +134,7 @@ The four Excel files downloaded contain data examples, which must be overwritten
 		<img src="https://github.com/clandinq/remindr/blob/main/pictures/gr_3.png" align="center" height="20%" width="20%">
  
 ### 4. Define reminder parameters
-Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. 
+Second, general project and specific reminder parameters need to be set in script `1_define_reminder_parameters.R`, which saves these parameters in `rem_parameters.xlsx` and sets up a repeating task with cronR. This script can be found in the folder `scripts`. **If using Windows, you must open R with administrator privileges (right click on the R icon) in order for the script to run properly**.
 
 1. **General project parameters**. These apply for all reminders in a project.
    
