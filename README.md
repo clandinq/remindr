@@ -2,6 +2,9 @@
 
 ## Overview
 
+<object data="https://d1p18nmj81zs72.cloudfront.net/klcnodes/klcnodes.html" style="height:320px; width:100%;" id="IE_NEEDS_AN_ID_0">
+
+
 remindR is a system for automating academic project reminders using R on Mac and Windows. Users can define what kind of reminders they want to obtain, which Gmail address to send the reminders from, and which addresses the reminders will be sent to. This system can help project managers, researchers, research assistants and students keep track of deadlines related to academic projects, reducing the burden of tracking these events manually and the eliminating the possibility of making manual mistakes. remindR uses packages [cronR](https://github.com/bnosac/cronR) (Mac OS X) and [taskscheduleR](https://github.com/bnosac/taskscheduleR) (Windows) to schedule recurring tasks.
 
 This system can send out four types of reminders:
