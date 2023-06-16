@@ -1,34 +1,3 @@
-#--------------------------------------------------------------------------------------------
-# File name: 		      test
-# Creation date:      2022-03-22
-# Author:          		César Landín
-# Purpose:
-# 	- Send test emails every hour
-#--------------------------------------------------------------------------------------------
-
-#################### Import packages #################### 
-pacman::p_load(this.path, gmailr, lubridate, stringr,
-               magrittr, readxl, writexl)
-options(gargle_oauth_email = TRUE,
-        gargle_oob_default = TRUE)
-#########################################################
-
-https://community.rstudio.com/t/gmailr-and-shiny-server-and-authentication/40684/6
-https://github.com/tidyverse/googledrive/issues/274#issuecomment-528605315
-https://github.com/r-lib/gmailr/issues/130
-https://datawookie.github.io/emayili/
-############################################################
-##    (1): Define all functions and general parameters.   ##
-############################################################
-# (1.1): Import parameters as objects. #
-# root_path <- str_replace(this.dir(), fixed("/scripts"), "")
-root_path <- "/home/clu5015/reminder_system"
-# (1.2): Authenticate client secret. #
-gm_auth_configure(key = "1065652583536-9nip1otb0mijnjgniqrhv6h1aume42gr.apps.googleusercontent.com",
-                  secret = "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")
-gm_auth(email = "academic.remindr@gmail.com",
-        path = "1065652583536-9nip1otb0mijnjgniqrhv6h1aume42gr.apps.googleusercontent.com",
-        use_oob = TRUE)
 
 # Cannot run this authentication in browser!
 
