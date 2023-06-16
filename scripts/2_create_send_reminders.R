@@ -30,7 +30,7 @@ gm_auth_configure(path = secret_path)
 gm_auth(email = email_from)
 
 # (1.3): Define current date. #
-todays_date <- lubridate::today()
+todays_date <- today()
 
 # (1.4): Define activated reminders. Quit if none activated. #
 activated_rems <- "fut_conf"[fut_conf_activate] %>% 
@@ -49,7 +49,7 @@ clean_days_s <- function(string) {
 # (1.6): Function that checks variable exists AND is not NA. #
 exists_not_na <- function(string) {
   if (exists(string)) {
-    !is.na(eval(as.name(string)))
+    !is.na(eval(as.name(string))) & eval(as.name(string)) != "NA"
   } else {
     FALSE
   }
@@ -95,7 +95,7 @@ for (rem_type in activated_rems) {
     current_varnames <- colnames(current_dataset)
     
     # Check if reminders need to be sent if not marked as complete.
-    if (is.na(complete)) {complete <- 0}
+    complete <- ifelse(is.na(complete), FALSE, complete)
     if (complete == 0) {
       
       # Loop over reminder frequencies.
@@ -135,17 +135,17 @@ for (rem_type in activated_rems) {
         
         # Check if reminder exists / has been sent. If doesn't exist, it hasn't been sent.
         notif_varname <- str_c("notif_", str_replace(time_until_deadline, " ", ""))
-        rem_sent <- tryCatch((eval(as.name(notif_varname)) == 1),
-                             error = function(e) {FALSE})
+        rem_sent <- ifelse(eval(as.name(notif_varname)) %in% c(0, NA), 0, 1)
         
         # Send reminders depending on dates and reminder status.
         if (!rem_sent & # (1) reminder not sent yet, 
             sent_email == 0 & # (2) an email for same conference / presentation hasn't been sent in current run, and
-            # (deadline - todays_date) >= 0 & (deadline - todays_date) <= f) { # (3) within timeframe to send reminder
+            (deadline - todays_date) >= 0 & (deadline - todays_date) <= f) { # (3) within timeframe to send reminder
             # (3) within timeframe to send reminder
-            (deadline
-             today(tzone = "Australia/Sydney")
-             # Assign reminder variable and add to list of variables to export.
+            # (deadline
+             # today(tzone = "Australia/Sydney")
+             
+            # Assign reminder variable and add to list of variables to export.
              assign(notif_varname, 1)
              
              # Define reminder text.
@@ -163,9 +163,9 @@ for (rem_type in activated_rems) {
                rem_text <- str_c("<html><body>",
                                  "Hello, <br><br>",
                                  "This is an automated reminder that the ", description, " has ",
-                                 case_when(dead_type == "Abstract" ~ "an abstract",
-                                           dead_type == "Paper" ~ "a paper"),
-                                 "submission deadline coming up on ", deadline, ". <br><br>",
+                                 case_when(str_detect(str_to_lower(dead_type), "abstract") ~ "an abstract",
+                                           str_detect(str_to_lower(dead_type), "paper") ~ "a paper"),
+                                 " submission deadline coming up on ", deadline, ". <br><br>",
                                  "Please remember to submit the ", dead_type, " to ", submission, " as soon as possible. <br><br>",
                                  ifelse(exists_not_na("website"), str_c("For more information, please refer to ", website, ". <br><br>"), ""),
                                  ifelse(exists_not_na("questions"), str_c("For any questions, please contact ", questions, ". <br><br>"), ""),

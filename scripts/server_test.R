@@ -9,46 +9,14 @@
 #################### Import packages #################### 
 pacman::p_load(this.path, gmailr, lubridate, stringr,
                magrittr, readxl, writexl)
-options(gargle_oauth_email = TRUE)
+options(gargle_oauth_email = TRUE,
+        gargle_oob_default = TRUE)
 #########################################################
 
-# Define functions
-gm_auth_configure <- function (key = "", secret = "", path = Sys.getenv("GMAILR_APP"), 
-                               appname = "gmailr", ..., app = httr::oauth_app(appname, key, 
-                                                                              secret, ...))  {
-  if (!((nzchar(key) && nzchar(secret)) || nzchar(path))) {
-    stop("Must supply either `key` and `secret` or `path`", 
-         call. = FALSE)
-  }
-  if (nzchar(path)) {
-    stopifnot(is_string(path))
-    app <- gargle::oauth_app_from_json(path)
-  }
-  stopifnot(is.null(app) || inherits(app, "oauth_app"))
-  .auth$set_app(app)
-  invisible(.auth)
-}
-
-gm_auth <- function (email = gm_default_email(), path = NULL, scopes = "full", 
-                        cache = gargle::gargle_oauth_cache(), use_oob = gargle::gargle_oob_default(), 
-                        token = NULL) {
-  scopes <- gm_scopes()[match.arg(scopes, names(gm_scopes()), 
-                                  several.ok = TRUE)]
-  app <- gm_oauth_app()
-  cred <- gargle::token_fetch(scopes = scopes, app = app, email = email, 
-                              path = path, package = "gmailr", cache = cache, use_oob = use_oob, 
-                              token = token)
-  if (!inherits(cred, "Token2.0")) {
-    stop("Can't get Google credentials.\n", "Are you running gmailr in a non-interactive session? Consider:\n", 
-         "  * Call `gm_auth()` directly with all necessary specifics.\n", 
-         call. = FALSE)
-  }
-  .auth$set_cred(cred)
-  .auth$set_auth_active(TRUE)
-  invisible()
-}
-
-
+https://community.rstudio.com/t/gmailr-and-shiny-server-and-authentication/40684/6
+https://github.com/tidyverse/googledrive/issues/274#issuecomment-528605315
+https://github.com/r-lib/gmailr/issues/130
+https://datawookie.github.io/emayili/
 ############################################################
 ##    (1): Define all functions and general parameters.   ##
 ############################################################
@@ -58,7 +26,12 @@ root_path <- "/home/clu5015/reminder_system"
 # (1.2): Authenticate client secret. #
 gm_auth_configure(key = "1065652583536-9nip1otb0mijnjgniqrhv6h1aume42gr.apps.googleusercontent.com",
                   secret = "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")
-gm_auth(email = "academic.remindr@gmail.com")
+gm_auth(email = "academic.remindr@gmail.com",
+        path = "1065652583536-9nip1otb0mijnjgniqrhv6h1aume42gr.apps.googleusercontent.com",
+        use_oob = TRUE)
+
+# Cannot run this authentication in browser!
+
 
 # Email from
 email_from <- "academic.remindr@gmail.com"
